@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+set -eu
+
+# AppImage tooling expects desktop-file-validate to exist.
+# On minimal environments such as WSL, desktop-file-utils may be missing.
+# Tauri generates the desktop entry for us, so a lightweight existence check is
+# enough to unblock packaging when the system binary is unavailable.
+
+if [ "$#" -lt 1 ]; then
+  echo "desktop-file-validate: missing file operand" >&2
+  exit 1
+fi
+
+for path in "$@"; do
+  if [ ! -f "$path" ]; then
+    echo "desktop-file-validate: $path: no such file" >&2
+    exit 1
+  fi
+done
